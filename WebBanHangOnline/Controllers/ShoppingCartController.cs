@@ -138,17 +138,20 @@ namespace WebBanHangOnline.Controllers
             if (ModelState.IsValid)
             {
                 ShoppingCart cart = (ShoppingCart)Session["Cart"];
-                List<Product> productBuy = new List<Product>();
-
-                cart?.Items?.ForEach(x =>
-                {
-                    Product product = db.Products.FirstOrDefault(p => p.Id == x.ProductId);
-                    if (product == null || product?.Quantity < x.Quantity)
-
-                });
-
                 if (cart != null)
                 {
+                    List<Product> productBuy = new List<Product>();
+
+                    foreach (var item in cart?.Items)
+                    {
+                        Product product = db.Products.FirstOrDefault(p => p.Id == item.ProductId);
+                        if (product == null || product?.Quantity < item.Quantity)
+                            return Json(code);
+                        product.Quantity = product.Quantity - item.Quantity;
+                        productBuy.Add(product);
+                    }
+
+
                     Order order = new Order();
                     order.CustomerName = req.CustomerName;
                     order.Phone = req.Phone;
@@ -174,8 +177,10 @@ namespace WebBanHangOnline.Controllers
                     //order.E = req.CustomerName;
                     db.Orders.Add(order);
                     db.SaveChanges();
-                    
 
+                    //update lại quantity
+                    db.Products.AddOrUpdate(productBuy.ToArray());
+                    db.SaveChanges();
                     //send mail cho khachs hang
                     var strSanPham = "";
                     var thanhtien = decimal.Zero;
