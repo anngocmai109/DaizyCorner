@@ -278,6 +278,10 @@
     <Compile Include="Migrations\202310161426318_tableWishList.designer.cs">
       <DependentUpon>202310161426318_tableWishList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202311160642251_AddStatus.cs" />
+    <Compile Include="Migrations\202311160642251_AddStatus.designer.cs">
+      <DependentUpon>202311160642251_AddStatus.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CommonAbstract.cs" />
@@ -3714,6 +3718,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202310161426318_tableWishList.resx">
       <DependentUpon>202310161426318_tableWishList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202311160642251_AddStatus.resx">
+      <DependentUpon>202311160642251_AddStatus.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

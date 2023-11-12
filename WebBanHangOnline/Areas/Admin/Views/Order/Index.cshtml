@@ -30,14 +30,15 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>#</th>
+                        <th>STT</th>
                         <th>Mã đơn hàng</th>
                         <th>Tên Khách hàng</th>
-                        <th>Phone</th>
-                        <th>Tiền</th>
+                        <th>Số điện thoại</th>
+                        <th>Thành tiền</th>
+                        <th>Phương thức thanh toán</th>
                         <th>Trạng thái</th>
                         <th>Ngày tạo</th>
-                        <th></th>
+                        <th>Tùy chọn</th>
                     </tr>
                 </thead>
 
@@ -48,12 +49,30 @@
                         foreach (var item in Model)
                         {
                             <tr>
-                                <td>@i</td>
-                                <td>@item.Code</td>
-                                <td>@item.CustomerName</td>
-                                <td>@item.Phone</td>
-                                <td>@WebBanHangOnline.Common.Common.FormatNumber(item.TotalAmount, 0)</td>
-                                <td>@(item.TypePayment==1?"Chờ thành toán":"Đã thanh toán")</td>
+                                <td align="center">@i</td>
+                                <td align="center">@item.Code</td>
+                                <td align="center">@item.CustomerName</td>
+                                <td align="center">@item.Phone</td>
+                                <td align="center">@WebBanHangOnline.Common.Common.FormatNumber(item.TotalAmount, 0)</td>
+                                <td align="center">@(item.TypePayment==1?"COD":"Chuyển khoản")</td>
+                                <td align="center">
+                                    @if (item.Status == 1)
+                                    {
+                                        <span>Chưa thanh toán</span>
+                                    }
+                                    @if (item.Status == 2)
+                                    {
+                                        <span>Đã thanh toán</span>
+                                    }
+                                    @if (item.Status == 3)
+                                    {
+                                        <span>Hoàn thành</span>
+                                    }
+                                    @if (item.Status == 4)
+                                    {
+                                        <span>Hủy</span>
+                                    }
+                                </td>
                                 <td>@item.CreatedDate.ToString("dd/MM/yyyy")</td>
                                 <td>
                                     <a href="/admin/order/view/@item.Id" class="btn btn-sm btn-success">Xem</a>
