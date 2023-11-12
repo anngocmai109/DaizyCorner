@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewBag.Title = "Liên hệ";
+}
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/contact_styles.css">
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/contact_responsive.css">
+<div class="container contact_container">
+    <div class="row">
+        <div class="col">
+
+            <!-- Breadcrumbs -->
+
+            <div class="breadcrumbs d-flex flex-row align-items-center">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>Liên hệ</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Map Container -->
+
+    <div class="row">
+        <div class="col">
+            <h3>Thông tin liên hệ</h3>
+                <p>Bạn có thể liên hệ với chúng tôi, gọi điện hoặc gửi email cho chúng tôi</p><br />
+                <p><b>Tên shop:</b> Cloudy Shop</p>
+                <p><b>SDT:</b> 0964372907</p>
+                <p><b>Email:</b> cloudyshop30@gmail.com</p>
+                <p><b>Mở cửa:</b> 8.00am - 18.00pm</p>
+                <p><b>Facebook:</b> https://www.facebook.com/profile.php?id=100058346104069</p>
+        </div>
+        <div class="col">
+            <div id="google_map">
+                <div class="map_container">
+                    <div id="map">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.7955550782135!2d105.8505402784068!3d21.000830838845665!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ac0c875280b7%3A0x4f52307a084eab95!2zMzkvNDkvMTg3IFAuIEjhu5NuZyBNYWksIFF14buzbmggTMO0aSwgSGFpIELDoCBUcsawbmcsIEjDoCBO4buZaSwgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1697283992720!5m2!1svi!2s" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Us -->
+   
+</div>
+
+@section scripts{
+    <script src="~/Content/assets/js/contact_custom.js"></script>
+}
+

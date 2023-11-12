@@ -1,0 +1,62 @@
+﻿@model IEnumerable<WebBanHangOnline.Models.EF.ProductCategory>
+
+@if (Model != null && Model.Any())
+{
+    <div class="banner">
+        <div class="container">
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    <div class="col-md-3">
+                        <div class="banner_item align-items-center" style="background-image: url(@item.Icon)">
+                            <div class="banner_category">
+                                <a href="/danh-muc-san-pham/@item.Alias-@(item.Id)" style="font-size:15px">@item.Title'</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+
+    @*<div class="best_sellers">
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
+            <div class="section_title new_arrivals_title">
+                    <h3 style="font-family: sans-serif;font-weight:bold">SẢN PHẨM BÁN CHẠY</h3>
+                </div>
+            </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="product_slider_container">
+                        <div class="owl-carousel owl-theme product_slider">
+
+                            @foreach (var item in Model)
+                            {
+                                <div class="col">
+                                    <div class="banner_item align-items-center" style="background-image: url(@item.Icon)">
+                                        <div class="banner_category">
+                                            <a href="/danh-muc-san-pham/@item.Alias-@(item.Id)" style="font-size:15px">@item.Title'</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+
+                         
+                        <div class="product_slider_nav_left product_slider_nav d-flex align-items-center justify-content-center flex-column">
+                                <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                            </div>
+                            <div class="product_slider_nav_right product_slider_nav d-flex align-items-center justify-content-center flex-column">
+                                <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@
+}
