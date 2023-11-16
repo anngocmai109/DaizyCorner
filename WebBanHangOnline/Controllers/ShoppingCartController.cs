@@ -119,7 +119,7 @@ namespace WebBanHangOnline.Controllers
                     //displayTmnCode.InnerText = "Mã Website (Terminal ID):" + TerminalID;
                     //displayTxnRef.InnerText = "Mã giao dịch thanh toán:" + orderId.ToString();
                     //displayVnpayTranNo.InnerText = "Mã giao dịch tại VNPAY:" + vnpayTranId.ToString();
-                    ViewBag.ThanhToanThanhCong = "Số tiền thanh toán (VND):" + vnp_Amount.ToString() + " đ";
+                    ViewBag.ThanhToanThanhCong = "Số tiền thanh toán (VND):" + vnp_Amount.ToString() + "đ " ;
                     //displayBankCode.InnerText = "Ngân hàng thanh toán:" + bankCode;
                 }
             }

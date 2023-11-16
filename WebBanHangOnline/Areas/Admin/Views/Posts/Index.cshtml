@@ -2,7 +2,7 @@
 @using PagedList.Mvc;
 @using PagedList;
 @{
-    ViewBag.Title = "Danh sách bài viết";
+    ViewBag.Title = "Danh sách khuyến mại";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
@@ -28,7 +28,7 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
                     <li class="breadcrumb-item active">@ViewBag.Title</li>
                 </ol>
             </div>
@@ -71,7 +71,6 @@
                         <th>Ngày tạo</th>
                         <th>Hiển thị</th>
                         <th style="width:150px">Tùy chỉnh</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -87,10 +86,8 @@
                                 <td><img src="@item.Image" width="50" /></td>
                                 <td>@item.Title</td>
                                 <td>@item.CreatedDate.ToString("dd/MM/yyyy")</td>
-                                <td class="text-center">
-                                    @*<a href='#' data-id="@item.Id" class="btnActive">@Html.Raw(strCheck)</a>*@
+                                <td class="text-center" align="center">
                                     <a href='#' data-id="@item.Id" class="btnActive">@Html.Raw(strCheck)</a>
-
                                 </td>
                                 <td>
                                     <a href="/admin/Posts/edit/@item.Id" class="btn btn-sm btn-primary">Sửa</a>

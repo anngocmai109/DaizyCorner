@@ -1489,12 +1489,7 @@
     <Content Include="Content\clients\dist\css\alt\adminlte.pages.min.css" />
     <Content Include="Content\clients\dist\css\alt\adminlte.plugins.css" />
     <Content Include="Content\clients\dist\css\alt\adminlte.plugins.min.css" />
-    <Content Include="Content\clients\dist\img\AdminLTELogo.png" />
-    <Content Include="Content\clients\dist\img\avatar.png" />
-    <Content Include="Content\clients\dist\img\avatar2.png" />
-    <Content Include="Content\clients\dist\img\avatar3.png" />
-    <Content Include="Content\clients\dist\img\avatar4.png" />
-    <Content Include="Content\clients\dist\img\avatar5.png" />
+    <Content Include="Content\clients\dist\img\ava.jpg" />
     <Content Include="Content\clients\dist\img\boxed-bg.jpg" />
     <Content Include="Content\clients\dist\img\boxed-bg.png" />
     <Content Include="Content\clients\dist\img\credit\american-express.png" />
@@ -1503,6 +1498,7 @@
     <Content Include="Content\clients\dist\img\credit\paypal.png" />
     <Content Include="Content\clients\dist\img\credit\paypal2.png" />
     <Content Include="Content\clients\dist\img\credit\visa.png" />
+    <Content Include="Content\clients\dist\img\dc.jpg" />
     <Content Include="Content\clients\dist\img\default-150x150.png" />
     <Content Include="Content\clients\dist\img\icons.png" />
     <Content Include="Content\clients\dist\img\photo1.png" />

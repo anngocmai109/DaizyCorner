@@ -11,7 +11,7 @@
         <th style="width:100px;">Số lượng</th>
         <th>Thành tiền</th>
         <th style="width:200px;">
-
+            Tùy chọn
         </th>
     </tr>
     @if (Model != null && Model.Any())
@@ -31,7 +31,8 @@
                 </td>
                 <td>@item.CategoryName</td>
                 <td id="productPrice">@Common.FormatNumber(item.Price, 0)</td>
-                <td><input type="number" class="form-control" id="productQuantity Quantity_@item.ProductId" min="1" value="@item.Quantity" step="1" data-price="@item.Price"/></td>
+                @*<td><input type="number" class="form-control" id="productQuantity Quantity_@item.ProductId" min="1" value="@item.Quantity" step="1" data-price="@item.Price"/></td>*@
+                <td><input type="number" class="form-control" id="Quantity_@item.ProductId" value="@item.Quantity" min="1" data-price="@item.Price"/></td>
                 <th>@Common.FormatNumber(item.TotalPrice, 2)đ</th>
                 <td>
                     <a href="#" data-id="@item.ProductId" class="btn btn-sm btn-danger btnDelete">Xóa</a>
