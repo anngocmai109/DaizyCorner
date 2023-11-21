@@ -15,10 +15,10 @@
             type: 'POST',
             data: { id: id, quantity: quatity },
             success: function (rs) {
-                if (rs.Success) {
+                if (rs.Success) 
                     $('#checkout_items').html(rs.Count);
-                    alert(rs.msg);
-                }
+                
+                alert(rs.msg);
             }
         });
     });
@@ -27,7 +27,7 @@
         var id = $(this).data("id");
         debugger;
         console.log(id);
-        var quantity = $('input#Quantity_'+id).val();
+        var quantity = $('input#Quantity_' + id).val();
         Update(id, quantity);
 
     });

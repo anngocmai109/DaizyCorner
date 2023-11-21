@@ -16,7 +16,7 @@ namespace WebBanHangOnline.Controllers
         [HttpGet]
         public ActionResult Index(string search = "")
         {
-            IQueryable<Product> items = db.Products;
+            IQueryable<Product> items = db.Products.Where(p => p.Quantity > 0);
             if (!string.IsNullOrEmpty(search))
             {
                 search = search.Trim().ToLower();

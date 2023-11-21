@@ -38,6 +38,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                 DateTime startDate = DateTime.ParseExact(fromDate, "dd/MM/yyyy", null);
                 query = query.Where(x => x.CreatedDate >= startDate);
             }
+
             if (!string.IsNullOrEmpty(toDate))
             {
                 DateTime endDate = DateTime.ParseExact(toDate, "dd/MM/yyyy", null);

@@ -193,16 +193,14 @@ namespace WebBanHangOnline.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CheckOut(OrderViewModel req)
         {
-            //var code = new { Success = false, Code = -1 };
-            var code = new { Success = false, Code = -1,Url=""};
+            var code = new { Success = false, Code = -1, Url=""};
 
             if (ModelState.IsValid)
             {
                 ShoppingCart cart = (ShoppingCart)Session["Cart"];
-                if (cart != null)
+                if (cart != null && cart?.Items?.Any() == true)
                 {
                     List<Product> productBuy = new List<Product>();
-
                     foreach (var item in cart?.Items)
                     {
                         Product product = db.Products.FirstOrDefault(p => p.Id == item.ProductId);
@@ -305,11 +303,16 @@ namespace WebBanHangOnline.Controllers
             var checkProduct = db.Products.FirstOrDefault(x => x.Id == id);
             if (checkProduct != null)
             {
+                if (checkProduct?.Quantity < quantity)
+                {
+                    code = new { Success = false, msg = "Số lượng bạn nhập vượt quá so với số lượng còn lại của hệ thống!", code = -1, Count = 0 };
+                    return Json(code);
+                }
+
                 ShoppingCart cart = (ShoppingCart)Session["Cart"];
                 if (cart == null)
-                {
                     cart = new ShoppingCart();
-                }
+
                 ShoppingCartItem item = new ShoppingCartItem
                 {
                     ProductId = checkProduct.Id,
