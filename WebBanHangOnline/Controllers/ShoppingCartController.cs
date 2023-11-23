@@ -206,6 +206,7 @@ namespace WebBanHangOnline.Controllers
                         Product product = db.Products.FirstOrDefault(p => p.Id == item.ProductId);
                         if (product == null || product?.Quantity < item.Quantity)
                             return Json(code);
+
                         product.Quantity = product.Quantity - item.Quantity;
                         productBuy.Add(product);
                     }
@@ -305,7 +306,7 @@ namespace WebBanHangOnline.Controllers
             {
                 if (checkProduct?.Quantity < quantity)
                 {
-                    code = new { Success = false, msg = "Số lượng bạn nhập vượt quá so với số lượng còn lại của hệ thống!", code = -1, Count = 0 };
+                    code = new { Success = false, msg = "Số lượng mua lớn hơn số lượng có. Không thể thêm vào giỏ hàng. Vui lòng thử lại!", code = -1, Count = 0 };
                     return Json(code);
                 }
 
@@ -345,8 +346,12 @@ namespace WebBanHangOnline.Controllers
             ShoppingCart cart = (ShoppingCart)Session["Cart"];
             if (cart != null)
             {
-                cart.UpdateQuantity(id, quantity);
-                return Json(new { Success = true });
+                var productBuy = db.Products.FirstOrDefault(x => x.Id == id);
+                if (productBuy != null && productBuy.Quantity > quantity)
+                {
+                    cart.UpdateQuantity(id, quantity);
+                    return Json(new { Success = true });
+                }
             }
             return Json(new { Success = false });
         }

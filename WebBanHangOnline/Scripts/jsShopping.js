@@ -25,8 +25,6 @@
     $('body').on('click', '.btnUpdate', function (e) {
         e.preventDefault();
         var id = $(this).data("id");
-        debugger;
-        console.log(id);
         var quantity = $('input#Quantity_' + id).val();
         Update(id, quantity);
 
@@ -93,6 +91,9 @@ function Update(id, quantity) {
         success: function (rs) {
             if (rs.Success) {
                 LoadCart();
+            } else {
+                debugger;
+                alert('Cập nhật thất bại. Số lượng mua lớn hơn số lượng có. Vui lòng thử lại.')
             }
         }
     });

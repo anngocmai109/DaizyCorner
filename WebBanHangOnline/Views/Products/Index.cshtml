@@ -1,6 +1,7 @@
-﻿@model IEnumerable<WebBanHangOnline.Models.EF.Product>
+﻿@model WebBanHangOnline.Models.ProductViewModel
 @{
     ViewBag.Title = "Danh sách sản phẩm";
+    var pagination = Model.Pagination;
 }
 <link rel="stylesheet" type="text/css" href="~/Content/assets/styles/categories_styles.css">
 <link rel="stylesheet" type="text/css" href="~/Content/assets/styles/categories_responsive.css">
@@ -52,46 +53,33 @@
                             <div class="product_sorting_container product_sorting_container_top">
                                 <ul class="product_sorting">
                                     <li>
-                                        <span class="type_sorting_text">Sắp xếp</span>
+                                        <span class="type_sorting_text">@(string.IsNullOrEmpty(pagination.OrderBy) ? "Sắp xếp" : pagination.OrderByStr) </span>
                                         <i class="fa fa-angle-down"></i>
                                         <ul class="sorting_type">
-                                         
-                                            <li class="type_sorting_btn" data-isotope-option='{ "sortBy": "price" }'><span>Giá</span></li>
-                                            <li class="type_sorting_btn" data-isotope-option='{ "sortBy": "name" }'><span>Tên sản phẩm</span></li>
+                                            <li class="type_sorting_btn" onclick="ChangePage(@pagination.CurrentPage,@pagination.PageSize, 'price')"><span>Giá</span></li>
+                                            <li class="type_sorting_btn" onclick="ChangePage(@pagination.CurrentPage,@pagination.PageSize, 'name')"><span>Tên sản phẩm</span></li>
                                         </ul>
                                     </li>
                                     <li>
                                         <span>Hiển thị</span>
-                                        <span class="num_sorting_text">6</span>
+                                        <span class="num_sorting_text" id="showItem">@pagination.PageSize</span>
                                         <i class="fa fa-angle-down"></i>
                                         <ul class="sorting_num">
-                                            <li class="num_sorting_btn"><span>6</span></li>
-                                            <li class="num_sorting_btn"><span>12</span></li>
-                                            <li class="num_sorting_btn"><span>24</span></li>
+                                            <li class="num_sorting_btn" onclick="ChangePage(@pagination.CurrentPage, 3)"><span>3</span></li>
+                                            <li class="num_sorting_btn" onclick="ChangePage(@pagination.CurrentPage, 6)"><span>6</span></li>
+                                            <li class="num_sorting_btn" onclick="ChangePage(@pagination.CurrentPage, 12)"><span>12</span></li>
+                                            <li class="num_sorting_btn" onclick="ChangePage(@pagination.CurrentPage, 24)"><span>24</span></li>
                                         </ul>
                                     </li>
                                 </ul>
-                                <div class="pages d-flex flex-row align-items-center">
-                                    <div class="page_current">
-                                        <span>1</span>
-                                        <ul class="page_selection">
-                                            <li><a href="#">1</a></li>
-                                            <li><a href="#">2</a></li>
-                                            <li><a href="#">3</a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="page_total"><span>of</span> 3</div>
-                                    <div id="next_page" class="page_next"><a href="#"><i class="fa fa-long-arrow-right" aria-hidden="true"></i></a></div>
-                                </div>
-
                             </div>
 
                             <!-- Product Grid -->
 
                             <div class="product-grid">
-                                @if (Model != null && Model.Any())
+                                @if (Model != null && Model.Products.Any())
                                 {
-                                    foreach (var item in Model)
+                                    foreach (var item in Model.Products)
                                     {
                                         var strImge = "";
                                         var img = item.ProductImage.FirstOrDefault(x => x.IsDefault);
@@ -140,6 +128,105 @@
                                     }
                                 }
                             </div>
+
+                            <nav class="blog-pagination justify-content-center d-flex">
+                                <ul class="pagination">
+                                    @{
+
+                                        if (pagination.CurrentPage > pagination.TotalPages)
+                                        {
+                                            pagination.CurrentPage = pagination.TotalPages;
+                                        }
+
+                                        if (pagination.TotalPages < 1) { return; };
+
+                                        int previewPage = 0;
+                                        int nextPage = 0;
+
+                                        if (pagination.CurrentPage > 1)
+                                        {
+                                            previewPage = pagination.CurrentPage - 1;
+                                        }
+
+                                        if (pagination.CurrentPage < pagination.TotalPages)
+                                        {
+                                            nextPage = pagination.CurrentPage + 1;
+                                        }
+
+                                        List<int> pageRange = new List<int>();
+                                        pageRange.Add(pagination.CurrentPage);
+
+                                        int delta = 2;//Số sang mỗi bên
+
+                                        for (int i = 1; i <= delta; i++)
+                                        {
+                                            if (pagination.CurrentPage + i <= pagination.TotalPages)
+                                            {
+                                                pageRange.Add(pagination.CurrentPage + i);
+                                            };
+
+                                            if (pagination.CurrentPage - i >= 1)
+                                            {
+                                                pageRange.Insert(0, pagination.CurrentPage - i);
+                                            };
+                                        }
+
+
+                                        if (pageRange[0] == 2)
+                                        {
+                                            pageRange.Insert(0, 1);
+                                        }
+
+                                        if (pageRange.Last() == pagination.TotalPages - 1)
+                                        {
+                                            pageRange.Add(pagination.TotalPages);
+                                        }
+                                    }
+
+
+                                    @if (pageRange[0] > 2)
+                                    {
+                                        <li class="page-item">
+                                            <a class="page-link" onclick="ChangePage(@previewPage,@pagination.PageSize)" aria-label="Previous">
+                                                <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+                                            </a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link" onclick="ChangePage(1,@pagination.PageSize)">1</a>
+                                        </li>
+
+                                        <li class="page-item">
+                                            <a class="page-link">...</a>
+                                        </li>
+                                    }
+
+                                    @if (pageRange?.Count > 0)
+                                    {
+                                        foreach (var item in pageRange)
+                                        {
+                                            string isActive = item == pagination.CurrentPage ? "active" : "";
+                                            <li class="page-item @isActive">
+                                                <a class="page-link" onclick="ChangePage(@item,@pagination.PageSize)">@item</a>
+                                            </li>
+                                        }
+                                    }
+
+                                    @if (pageRange.Last() < pagination.TotalPages - 1)
+                                    {
+                                        <li class="page-item">
+                                            <a class="page-link">...</a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link" onclick="ChangePage(@pagination.TotalPages,@pagination.PageSize)">@pagination.TotalPages</a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link" onclick="ChangePage(@nextPage,@pagination.PageSize)" aria-label="Next">
+                                                <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            </nav>
                         </div>
                     </div>
                 </div>
@@ -150,4 +237,15 @@
 
 @section scripts{
     <script src="~/Content/assets/js/categories_custom.js"></script>
-    }
+    <script>
+        function ChangePage(curentPage, pageSize, orderBy) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchData = urlParams.get('search');
+            if (!curentPage || curentPage < 0) curentPage = 1;
+            if (!orderBy) {
+                orderBy = '@pagination.OrderBy'
+            }
+            location.href = `/Products/Index?search=${searchData ? searchData : ''}&curentPage=${curentPage}&pageSize=${pageSize}&orderBy=${orderBy}`
+        }
+    </script>
+}

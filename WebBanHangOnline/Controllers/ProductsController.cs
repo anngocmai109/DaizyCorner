@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+using WebBanHangOnline.Common;
 using WebBanHangOnline.Models;
 using WebBanHangOnline.Models.EF;
 
@@ -14,9 +13,18 @@ namespace WebBanHangOnline.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         [HttpGet]
-        public ActionResult Index(string search = "")
+        public ActionResult Index(string search = "", int curentPage = 1, int pageSize = 6, string orderBy = "")
         {
-            IQueryable<Product> items = db.Products.Where(p => p.Quantity > 0);
+            ProductViewModel productViews = new ProductViewModel();
+
+            Pagination pagination = new Pagination()
+            {
+                CurrentPage = curentPage,
+                PageSize = pageSize,
+                OrderBy = orderBy
+            };
+            IQueryable<Product> items = db.Products.Where(p => p.Quantity > 0).OrderBy(x => x.Id);
+
             if (!string.IsNullOrEmpty(search))
             {
                 search = search.Trim().ToLower();
@@ -24,7 +32,27 @@ namespace WebBanHangOnline.Controllers
                                          p.Description.Trim().ToLower().Contains(search));
             }
 
-            return View(items.ToList());
+            if (!string.IsNullOrEmpty(orderBy))
+                switch (orderBy)
+                {
+                    case "price":
+                        items = items.OrderBy(x => x.PriceSale);
+                        pagination.OrderByStr = "Giá";
+                        break;
+
+                    case "name":
+                        items = items.OrderBy(x => x.Title);
+                        pagination.OrderByStr = "Tên sản phẩm";
+                        break;
+                }
+
+
+            pagination.TotalPages = (items?.Count() == 0 ? 0 : Convert.ToInt32(Math.Ceiling(Convert.ToDecimal(items.Count()) / pageSize)));
+
+            productViews.Pagination = pagination;
+            productViews.Products = items.Skip((curentPage - 1)* pageSize).Take(pageSize).ToList();
+
+            return View(productViews);
         }
 
         public ActionResult Detail(string alias, int id)
