@@ -52,7 +52,7 @@ namespace WebBanHangOnline.Areas.Admin.Controllers
                 DoanhThu = x.TotalSell,
                 LoiNhuan = x.TotalSell - x.TotalBuy
             });
-            return Json(new { Data = result }, JsonRequestBehavior.AllowGet);
+            return Json(new { Data = result.ToList() }, JsonRequestBehavior.AllowGet);
         }
     }
 }

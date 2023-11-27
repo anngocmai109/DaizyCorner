@@ -130,7 +130,7 @@
                                 <th>Lợi nhuận</th>
                             </tr>
                         </thead>
-                        <tbody id="load_data">
+                        <tbody id="load_statisticalTable">
                         </tbody>
                     </table>
                 </div>
@@ -168,7 +168,8 @@
                     var arrDoanhThu = [];
                     var arrLoiNhuan = [];
                     var arrDate = [];
-                    $('#load_data').empty();
+                    $('#load_statisticalTable').empty();
+
                     $('#chartCanvas').empty();
                     $('#chartCanvas').html(`<canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>`)
 
@@ -178,6 +179,7 @@
                         arrDoanhThu.push(item.DoanhThu);
                         arrLoiNhuan.push(item.LoiNhuan);
                     });
+
                     var areaChartData = {
                         labels: arrDate,
                         datasets: [
@@ -231,14 +233,16 @@
         }
 
         function load_data(data) {
-            let table = $("#statisticalTable").DataTable({
-                data: data,
+            console.log(data);
+            var table = $("#statisticalTable").DataTable({
+                "destroy": true,
                 'bFilter': false,
                 'bLengthChange': false,
                 'bSort': false,
+                data: data,
                 'pageLength': 5,
                 "language": {
-                    "emptyTable": "No record found.",
+                    "emptyTable": "Không có dữ liệu.",
                     "paginate": {
                         "next": "Sau",
                         "previous": "Trước",
@@ -257,6 +261,7 @@
                         "autoWidth": true,
                         "render": function (data, type, row) {
                             let strDate = moment(row.Date).format('DD/MM/yyyy')
+                            console.log(strDate);
                             return strDate;
                         }
                     },
