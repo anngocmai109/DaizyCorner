@@ -101,7 +101,7 @@
                 <div class="col-md-3 p-0" style="margin-right: 10px">
                     <div class="form-group m-0">
                         <label class="control-label">Từ ngày: </label>
-                        <input type="date" id="fromDate" class="form-control justify-content-center" value="@DateTime.Now.AddDays(-7).ToString("yyyy-MM-dd")" />
+                        <input type="date" id="fromDate" class="form-control justify-content-center" value="@DateTime.Now.AddDays(-27).ToString("yyyy-MM-dd")" />
                     </div>
                 </div>
                 <div class="col-md-3 p-0" style="margin-right: 10px">
@@ -110,7 +110,7 @@
                         <input type="date" id="toDate" class="form-control justify-content-center" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
                     </div>
                 </div>
-                <div class="col-md-3 d-flex align-items-end" >
+                <div class="col-md-3 d-flex align-items-end">
                     <a href="javascript:;" id="btnTimKiem" class="btn btn-success">Tìm kiếm</a>
                 </div>
             </div>
@@ -121,7 +121,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered" id="statisticalTable">
                         <thead>
                             <tr>
                                 <th>STT</th>
@@ -145,6 +145,7 @@
 @section scripts{
     <script src="~/Content/clients/plugins/chart.js/Chart.min.js"></script>
     <script src="~/Content/assets/plugins/moment/moment.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
     <script>
         $(document).ready(function () {
             BindData();
@@ -155,7 +156,7 @@
         })
 
         function BindData() {
-            
+
             $.ajax({
                 url: '/Statistical/GetStatistical',
                 type: 'GET',
@@ -169,9 +170,9 @@
                     var arrDate = [];
                     $('#load_data').empty();
                     $('#chartCanvas').empty();
-                    $('#chartCanvas').html(<canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>)
-                    $.each(rs.Data, function (i, item) {
+                    $('#chartCanvas').html(`<canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>`)
 
+                    $.each(rs.Data, function (i, item) {
                         var strDate = moment(item.Date).format('DD/MM/yyyy');
                         arrDate.push(strDate);
                         arrDoanhThu.push(item.DoanhThu);
@@ -230,17 +231,53 @@
         }
 
         function load_data(data) {
-            var strHtml = "";
-            $.each(data, function (i, item) {
-                var strDate = moment(item.Date).format('DD/MM/yyyy');
-                strHtml += "<tr>";
-                strHtml += "<td>" + (i + 1) + "</td>";
-                strHtml += "<td>" + strDate + "</td>";
-                strHtml += "<td>" + item.DoanhThu + "</td>";
-                strHtml += "<td>" + item.LoiNhuan + "</td>";
-                strHtml += "</tr>";
+            let table = $("#statisticalTable").DataTable({
+                data: data,
+                'bFilter': false,
+                'bLengthChange': false,
+                'bSort': false,
+                'pageLength': 5,
+                "language": {
+                    "emptyTable": "No record found.",
+                    "paginate": {
+                        "next": "Sau",
+                        "previous": "Trước",
+                    },
+                    "info": "Hiển thị _START_ đến _END_ của _TOTAL_ bản ghi",
+                    "infoEmpty": "Hiển thị 0 đến 0 của 0 bản ghi",
+                    "lengthMenu": "Hiển thị _MENU_ bản ghi",
+                },
+                "columns": [
+                    {
+                        "data":"Date",
+                        "autoWidth": true,
+                    },
+                    {
+                        "data": "Date",
+                        "autoWidth": true,
+                        "render": function (data, type, row) {
+                            let strDate = moment(row.Date).format('DD/MM/yyyy')
+                            return strDate;
+                        }
+                    },
+                    {
+                        "data": "DoanhThu",
+                        "autoWidth": true,
+                    },
+                    {
+                        "data": "LoiNhuan",
+                        "autoWidth": true,
+                    },
+                ],
+
+                "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+                    var api = this.api();
+                    var pageInfo = api.page.info();
+                    var rowIndex = (iDisplayIndex + 1) + (pageInfo.page * pageInfo.length);
+                    $(nRow).find('td:eq(0)').html(rowIndex);
+                    return nRow;
+                },
             });
-            $('#load_data').html(strHtml)
         }
     </script>
 }
