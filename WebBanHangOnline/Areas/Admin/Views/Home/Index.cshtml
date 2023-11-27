@@ -168,8 +168,8 @@
                     var arrLoiNhuan = [];
                     var arrDate = [];
                     $('#load_data').empty();
-                    //$('#chartCanvas').empty();
-                    //$('#chartCanvas').html(<canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>)
+                    $('#chartCanvas').empty();
+                    $('#chartCanvas').html(<canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>)
                     $.each(rs.Data, function (i, item) {
 
                         var strDate = moment(item.Date).format('DD/MM/yyyy');
