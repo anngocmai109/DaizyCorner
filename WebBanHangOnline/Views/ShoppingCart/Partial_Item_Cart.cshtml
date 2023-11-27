@@ -1,5 +1,7 @@
 ﻿@model IEnumerable<WebBanHangOnline.Models.ShoppingCartItem>
 @using WebBanHangOnline.Common
+@using WebBanHangOnline.Models.Common
+
 <table class="table">
     <tr class="text-center">
         <th>STT</th>
@@ -31,7 +33,7 @@
                 </td>
                 <td>@item.CategoryName</td>
                 <td id="productPrice">@Common.FormatNumber(item.Price, 0)</td>
-                <td><input type="number" class="form-control" id="Quantity_@item.ProductId" value="@item.Quantity" min="1" data-price="@item.Price"/></td>
+                <td><input type="number" class="form-control" id="Quantity_@item.ProductId" value="@item.Quantity" min="1" data-price="@item.Price" /></td>
                 <th>@Common.FormatNumber(item.TotalPrice, 2)đ</th>
                 <td>
                     <a href="#" data-id="@item.ProductId" class="btn btn-sm btn-danger btnDelete">Xóa</a>
@@ -40,6 +42,7 @@
             </tr>
             i++;
         }
+
         <tr>
             <th colspan="6" class="text-right" style="font-family:sans-serif;font-weight:bold">Tổng: </th>
             <th class="text-center">@Common.FormatNumber(tongtien, 0)</th>

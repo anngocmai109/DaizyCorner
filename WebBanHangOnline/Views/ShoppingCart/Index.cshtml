@@ -2,6 +2,7 @@
 @using WebBanHangOnline.Common
 @{
     ViewBag.Title = "Giỏ hàng";
+    string message = (string)ViewBag.MessageFromCheckOut;
 }
 <link rel="stylesheet" type="text/css" href="~/Content/assets/styles/categories_styles.css">
 <link rel="stylesheet" type="text/css" href="~/Content/assets/styles/categories_responsive.css">
@@ -26,8 +27,6 @@
                     @Html.Action("Partial_Item_Cart", "ShoppingCart")
                 </div>
                 <div class="col-md-12">
-                    @*@if (ViewBag.CheckCart != null)
-                        {*@
                     @if (Model?.Any() == true)
                     {
                         <div class="text-right">
@@ -35,8 +34,6 @@
                             <a href="#" data-toggle="modal" data-target="#chooseAddress" class="btn btn-success">Mua hàng</a>
                         </div>
                     }
-                    @*}*@
-
                 </div>
             </div>
         </div>
@@ -89,7 +86,10 @@
     <script src="~/Content/assets/js/categories_custom.js"></script>
     <script src="~/Content/clients/plugins/jquery-validation/jquery.validate.min.js"></script>
     <script>
+        var messageFromCheckout = '@message';
         $(document).ready(function () {
+            if (decodeURIComponent(messageFromCheckout))
+                alert(decodeURIComponent(messageFromCheckout));
 
             var $formChooseProvice = $('#formChooseProvince');
             $('#formChooseProvince').validate({

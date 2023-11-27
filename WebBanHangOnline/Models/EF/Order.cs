@@ -26,7 +26,11 @@ namespace WebBanHangOnline.Models.EF
         public string Phone { get; set; }
         [Required(ErrorMessage = "Địa chỉ khách hàng không được để trống")]
         public string Address { get; set; }
+        public string Province { get; set; }
+        public string District { get; set; }
+        public string Ward { get; set; }
         public decimal TotalAmount { get; set; }
+        public decimal TransportFee { get; set; }
         public int Quantity { get; set; }
         public int TypePayment { get; set; }
         public string CustomerId { get; set; }

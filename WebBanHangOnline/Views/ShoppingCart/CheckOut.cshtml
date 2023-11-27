@@ -29,8 +29,8 @@
             </div>
             @if (ViewBag.CheckCart != null)
             {
+                <span id="show_success"></span>
                 <div class="row">
-                    <div id="show_success"></div>
                     <div class="col-lg-4">
                         @Html.Action("Partial_CheckOut", "ShoppingCart")
                     </div>
@@ -50,6 +50,7 @@
 @section scripts{
     <script src="~/Content/assets/js/categories_custom.js"></script>
     <script>
+
         function OnFailure(rs) {
             if (!rs.Success) {
                 $('#show_success').html("Đơn hàng của bạn chưa được khởi tạo thành công! Xin vui lòng thử lại");

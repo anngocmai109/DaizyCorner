@@ -14,16 +14,16 @@ namespace WebBanHangOnline.Models
         public string Phone { get; set; }
 
 
-        [Required(ErrorMessage = "Địa chỉ khổng để trống")]
+        [Required(ErrorMessage = "Địa chỉ không để trống")]
         public string Address { get; set; }
 
-        [Required(ErrorMessage = "Tỉnh/Thành khổng để trống")]
+        [Required(ErrorMessage = "Tỉnh/Thành không để trống")]
         public string Province { get; set; }
 
-        [Required(ErrorMessage = "Quận/Huyện khổng để trống")]
+        [Required(ErrorMessage = "Quận/Huyện không để trống")]
         public string District { get; set; }
 
-        [Required(ErrorMessage = "Phường/Xã khổng để trống")]
+        [Required(ErrorMessage = "Phường/Xã không để trống")]
         public string Ward { get; set; }
 
         public string Email { get; set; }

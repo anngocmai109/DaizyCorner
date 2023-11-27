@@ -196,6 +196,10 @@
     <Compile Include="Areas\Admin\Controllers\SettingSystemController.cs" />
     <Compile Include="Areas\Admin\Controllers\StatisticalController.cs" />
     <Compile Include="Common\Helpers.cs" />
+    <Compile Include="Migrations\202311271511454_updateFeeForOrder.cs" />
+    <Compile Include="Migrations\202311271511454_updateFeeForOrder.designer.cs">
+      <DependentUpon>202311271511454_updateFeeForOrder.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\CheckFee.cs" />
     <Compile Include="Models\Common\GHTKModel.cs" />
     <Compile Include="Models\Common\Pagination.cs" />
@@ -3724,6 +3728,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202311160642251_AddStatus.resx">
       <DependentUpon>202311160642251_AddStatus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202311271511454_updateFeeForOrder.resx">
+      <DependentUpon>202311271511454_updateFeeForOrder.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

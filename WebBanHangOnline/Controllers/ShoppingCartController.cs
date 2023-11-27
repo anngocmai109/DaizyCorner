@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -57,9 +58,10 @@ namespace WebBanHangOnline.Controllers
             }
         }
 
-        //[AllowAnonymous]
         public ActionResult Index()
         {
+            if (TempData.ContainsKey("MessageFromCheckOut"))
+                ViewBag.MessageFromCheckOut = TempData["MessageFromCheckOut"].ToString();
 
             ShoppingCart cart = (ShoppingCart)Session["Cart"];
             if (cart != null && cart.Items.Any())
@@ -129,71 +131,76 @@ namespace WebBanHangOnline.Controllers
             return View();
         }
 
-        //[AllowAnonymous]
         public ActionResult CheckOut()
         {
             ShoppingCart cart = (ShoppingCart)Session["Cart"];
-            if (cart != null && cart.Items.Any())
-                ViewBag.CheckCart = cart;
-
-            GHTKFee gHTKFee = (GHTKFee)Session["GHTKFee"];
-            if (gHTKFee != null)
-                ViewBag.GHTKFee = gHTKFee;
-
-            OrderAddress orderAddress = (OrderAddress)Session["OrderAddress"];
-            if (gHTKFee != null)
-                ViewBag.OrderAddress = orderAddress;
-
+            if (!(cart != null && cart.Items.Any()) || !TempData.ContainsKey("GHTKFee") || !TempData.ContainsKey("OrderAddress"))
+            {
+                TempData["MessageFromCheckOut"] = "Không có thông thanh toán vui lòng thử lại.";
+                return Redirect("gio-hang");
+            }    
+            ViewBag.CheckCart = cart;
             return View();
         }
 
-        //[AllowAnonymous]
         public ActionResult CheckOutSuccess()
         {
             return View();
         }
 
-        //[AllowAnonymous]
         public ActionResult Partial_Item_ThanhToan()
         {
+            string ghtkFeeStr = string.Empty;
+            if (TempData.ContainsKey("GHTKFee"))
+            {
+                ghtkFeeStr = TempData["GHTKFee"].ToString();
+                TempData.Keep("GHTKFee");
+                ViewBag.GHTKFee = JsonConvert.DeserializeObject<GHTKFee>(ghtkFeeStr);
+            }
+
             ShoppingCart cart = (ShoppingCart)Session["Cart"];
             if (cart != null && cart.Items.Any())
-            {
                 return PartialView(cart.Items);
-            }
+
             return PartialView();
         }
 
         [AllowAnonymous]
         public ActionResult Partial_Item_Cart()
         {
+
             ShoppingCart cart = (ShoppingCart)Session["Cart"];
+
             if (cart != null && cart.Items.Any())
             {
                 return PartialView(cart.Items);
             }
+
             return PartialView();
         }
 
-        //[AllowAnonymous]
         public ActionResult ShowCount()
         {
             ShoppingCart cart = (ShoppingCart)Session["Cart"];
             if (cart != null)
-            {
                 return Json(new { Count = cart.Items.Count }, JsonRequestBehavior.AllowGet);
-            }
+
             return Json(new { Count = 0 }, JsonRequestBehavior.AllowGet);
         }
 
-        //[AllowAnonymous]
         public ActionResult Partial_CheckOut()
         {
+            string orderAddress = string.Empty;
             var user = UserManager.FindByNameAsync(User.Identity.Name).Result;
-            if (user != null)
+            if (TempData.ContainsKey("OrderAddress"))
             {
-                ViewBag.User = user;
+                orderAddress = TempData["OrderAddress"].ToString();
+                ViewBag.OrderAddress = JsonConvert.DeserializeObject<OrderAddress>(orderAddress);
             }
+
+            if (user != null)
+                ViewBag.User = user;
+
             return PartialView();
         }
 
@@ -216,28 +223,22 @@ namespace WebBanHangOnline.Controllers
                 if (ghtkFee.success == true)
                 {
                     isSuccess = true;
-                    if (Session["GHTKFee"] != null)
+                    TempData["GHTKFee"] = JsonConvert.SerializeObject(ghtkFee.fee);
+                    OrderAddress orderAddress = new OrderAddress
                     {
-                        Session.Remove("GHTKFee");
-                        Session.Add("GHTKFee", ghtkFee.fee);
-                    }
+                        address = checkFee.address,
+                        district = checkFee.district,
+                        province = checkFee.province,
+                        ward = checkFee.ward,
+                    };
 
-                    if (Session["OrderAddress"] != null)
-                    {
-                        Session.Remove("OrderAddress");
-                        Session.Add("OrderAddress", new OrderAddress
-                        {
-                            address = checkFee.address,
-                            district = checkFee.district,
-                            province = checkFee.province,
-                            ward = checkFee.ward,
-                        });
-                    }
+                    TempData["OrderAddress"] = JsonConvert.SerializeObject(orderAddress);
                 }
             }
-            catch (Exception ex)
+            catch
             {
             }
+
             return Json(new
             {
                 success = isSuccess,
@@ -245,7 +246,6 @@ namespace WebBanHangOnline.Controllers
         }
 
         [HttpPost]
-        //[AllowAnonymous]
         [ValidateAntiForgeryToken]
         public ActionResult CheckOut(OrderViewModel req)
         {
@@ -272,7 +272,16 @@ namespace WebBanHangOnline.Controllers
                     order.CustomerName = req.CustomerName;
                     order.Phone = req.Phone;
                     order.Address = req.Address;
+                    order.Province = req.Province;
+                    order.District = req.District;
+                    order.Ward = req.Ward;
                     order.Email = req.Email;
+                    if (TempData.ContainsKey("GHTKFee"))
+                    {
+                        GHTKFee gHTKFee = JsonConvert.DeserializeObject<GHTKFee>(TempData["GHTKFee"].ToString());
+                        order.TransportFee = gHTKFee?.fee ?? 0;
+                    }
+
                     order.Status = 1; //chưa thanh toán - 2 đã thanh toán - 3 hoàn thành đơn hàng- 4 hủy
 
                     cart.Items.ForEach(x => order.OrderDetails.Add(new OrderDetail
@@ -281,7 +290,7 @@ namespace WebBanHangOnline.Controllers
                         Quantity = x.Quantity,
                         Price = x.Price
                     }));
-                    order.TotalAmount = cart.Items.Sum(x => (x.Price * x.Quantity));
+                    order.TotalAmount = cart.Items.Sum(x => (x.Price * x.Quantity)) + order.TransportFee;
                     order.TypePayment = req.TypePayment;
                     order.CreatedDate = DateTime.Now;
                     order.ModifiedDate = DateTime.Now;
@@ -337,8 +346,7 @@ namespace WebBanHangOnline.Controllers
                     contentAdmin = contentAdmin.Replace("{{TongTien}}", WebBanHangOnline.Common.Common.FormatNumber(TongTien, 0));
                     WebBanHangOnline.Common.Common.SendMail("Daizy Corner", "Đơn hàng mới #" + order.Code, contentAdmin.ToString(), ConfigurationManager.AppSettings["EmailAdmin"]);
                     cart.ClearCart();
-                    //code = new { Success = true, Code = 1 };
-                    //var url = "";
+                   
                     code = new { Success = true, Code = 1, Url = "" };
                     if (req.TypePayment == 2)
                     {
@@ -351,7 +359,6 @@ namespace WebBanHangOnline.Controllers
             return Json(code);
         }
 
-        //[AllowAnonymous]
         [HttpPost]
         public ActionResult AddToCart(int id, int quantity)
         {
@@ -378,6 +385,7 @@ namespace WebBanHangOnline.Controllers
                     Alias = checkProduct.Alias,
                     Quantity = quantity
                 };
+
                 if (checkProduct.ProductImage.FirstOrDefault(x => x.IsDefault) != null)
                 {
                     item.ProductImg = checkProduct.ProductImage.FirstOrDefault(x => x.IsDefault).Image;
