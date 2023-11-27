@@ -4,7 +4,7 @@ using WebBanHangOnline.Models;
 
 namespace WebBanHangOnline.Areas.Admin.Controllers
 {
-    [Authorize(Roles="Admin")]
+    //[Authorize(Roles="Admin")]
     public class HomeController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

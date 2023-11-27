@@ -116,7 +116,7 @@
             </div>
             <div class="row">
                 <div class="col-md-8">
-                    <div class="chart">
+                    <div class="chart" id="chartCanvas">
                         <canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                     </div>
                 </div>
@@ -155,9 +155,7 @@
         })
 
         function BindData() {
-            var arrDoanhThu = [];
-            var arrLoiNhuan = [];
-            var arrDate = [];
+            
             $.ajax({
                 url: '/Statistical/GetStatistical',
                 type: 'GET',
@@ -166,7 +164,12 @@
                     toDate: moment($('#toDate').val()).format('DD/MM/yyyy'),
                 },
                 success: function (rs) {
-
+                    var arrDoanhThu = [];
+                    var arrLoiNhuan = [];
+                    var arrDate = [];
+                    $('#load_data').empty();
+                    //$('#chartCanvas').empty();
+                    //$('#chartCanvas').html(<canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>)
                     $.each(rs.Data, function (i, item) {
 
                         var strDate = moment(item.Date).format('DD/MM/yyyy');

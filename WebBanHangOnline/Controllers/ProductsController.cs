@@ -13,7 +13,7 @@ namespace WebBanHangOnline.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         [HttpGet]
-        public ActionResult Index(string search = "", int curentPage = 1, int pageSize = 6, string orderBy = "")
+        public ActionResult Index(string search = "", int curentPage = 1, int pageSize = 8, string orderBy = "")
         {
             ProductViewModel productViews = new ProductViewModel();
 

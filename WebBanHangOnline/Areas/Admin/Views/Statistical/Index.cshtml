@@ -62,15 +62,16 @@
     <script src="~/Content/assets/plugins/moment/moment.min.js"></script>
     <script>
         $(function () {
-            var arrDoanhThu = [];
-            var arrLoiNhuan = [];
-            var arrDate = [];
+            
             $.ajax({
                 url: '/Statistical/GetStatistical',
                 type: 'GET',
                 data: {},
                 success: function (rs) {
-
+                    var arrDoanhThu = [];
+                    var arrLoiNhuan = [];
+                    var arrDate = [];
+                    $('#load_data').empty();
                     $.each(rs.Data, function (i, item) {
 
                         var strDate = moment(item.Date).format('DD/MM/yyyy');
