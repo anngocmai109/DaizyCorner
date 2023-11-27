@@ -1,5 +1,13 @@
 ﻿@model IEnumerable<WebBanHangOnline.Models.ShoppingCartItem>
 @using WebBanHangOnline.Common
+@using WebBanHangOnline.Models.Common
+@{ 
+    GHTKFee gHTKFee = null;
+    if (ViewBag.GHTKFee != null)
+    {
+        gHTKFee = (GHTKFee)ViewBag.GHTKFee;
+    }
+}
 @if (Model != null && Model.Any())
 {
     <h3 class="text-center" style="font-family:sans-serif;font-weight:bold">Thông tin đặt hàng</h3>
@@ -17,13 +25,21 @@
                 <td>x @item.Quantity</td>
             </tr>
         }
+
+        @{ 
+            if (gHTKFee != null)
+            {
+                tongtien = tongtien + gHTKFee.fee;
+                <tr>
+                    <td colspan="5" style="font-weight:bold;font-family:sans-serif;font-size:20px;">Phí vận chuyển</td>
+                    <td style="font-weight: bold; font-family: sans-serif;font-size: 20px; ">@Common.FormatNumber(gHTKFee.fee, 0)</td>
+                </tr>
+            }
+        }
+
         <tr>
             <td colspan="5" style="font-weight:bold;font-family:sans-serif;font-size:20px;">Tổng tiền</td>
             <td style="font-weight: bold; font-family: sans-serif;font-size: 20px; ">@Common.FormatNumber(tongtien, 0)</td>
         </tr>
     </table>
-}
-else
-{
-
 }

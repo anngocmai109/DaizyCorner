@@ -32,7 +32,7 @@
                     {
                         <div class="text-right">
                             <a href="#" class="btn btn-danger btnDeleteAll">Xóa giỏ hàng</a>
-                            <a href="/thanh-toan" class="btn btn-success">Mua hàng</a>
+                            <a href="#" data-toggle="modal" data-target="#chooseAddress" class="btn btn-success">Mua hàng</a>
                         </div>
                     }
                     @*}*@
@@ -42,9 +42,221 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="chooseAddress">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Vui lòng chọn địa chỉ giao hàng</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form role="form" id="formChooseProvince">
+                    <div class="form-group">
+                        <label>Tỉnh/Thành</label>
+                        <select class="form-control" name="province" id="province">
+                            <option value="">--Chọn Tỉnh/Thành--</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Quận/Huyện</label>
+                        <select class="form-control" name="district" id="district">
+                            <option value="">--Chọn Quận/Huyện--</option>
+                        </select>
+                    </div>
 
+                    <div class="form-group">
+                        <label>Phường/Xã</label>
+                        <select class="form-control" name="ward" id="ward">
+                            <option value="">--Chọn Phường/Xã--</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Đường/Số nhà/...</label>
+                        <input class="form-control" type="text" name="address" id="address">
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                        <button type="button" class="btn btn-primary" id="btnMuahang">Mua hàng</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 @section scripts{
     <script src="~/Content/assets/js/categories_custom.js"></script>
+    <script src="~/Content/clients/plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script>
+        $(document).ready(function () {
 
+            var $formChooseProvice = $('#formChooseProvince');
+            $('#formChooseProvince').validate({
+                onfocusout: function (element) { $(element).valid() },
+                onkeyup: function (element) { $(element).valid() },
+                focusInvalid: true,
+                rules: {
+                    "province": {
+                        required: true,
+                    },
+                    "district": {
+                        required: true,
+                    },
+                    "ward": {
+                        required: true,
+                    },
+                    "address": {
+                        required: true,
+                    },
+                },
+                messages: {
+                    "province": {
+                        required: "Vui lòng chọn Tỉnh/Thành.",
+                    },
+                    "district": {
+                        required: "Vui lòng chọn Quận/Huyện",
+                    },
+                    "ward": {
+                        required: "Vui lòng chọn Phường/Xã.",
+                    },
+                    "address": {
+                        required: "Vui lòng điền Đường/Số nhà.",
+                    },
+                },
+            });
+
+
+            //Get data province
+            var dataAll = [];
+            var dataDistict = [];
+            var dataWard = [];
+            $.getJSON("https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json", function (data) {
+                dataAll = data;
+            }).fail(function () {
+                alert("Lấy thông tin địa lý thất bại. Vui lòng thử lại.");
+            });
+
+            var chooseAddressModal = $('#chooseAddress');
+            var $province = chooseAddressModal.find("#province");
+            var $district = chooseAddressModal.find("#district");
+            var $ward = chooseAddressModal.find("#ward");
+
+
+            chooseAddressModal.on('shown.bs.modal', function () {
+                if (dataAll.length > 0) {
+                    generateProvince()
+                }
+
+                $province.on('change', function () {
+                    var provinceId = $province.val();
+                    generateDisttrict(provinceId);
+
+                })
+
+                $district.on('change', function () {
+                    var provinceId = $province.val();
+                    var districtId = $district.val();
+                    generateWard(provinceId, districtId)
+                })
+
+                //form
+
+                $('#btnMuahang').on('click', function () {
+                    let validForm = $('#formChooseProvince').valid();
+                    if (validForm) {
+                        let provinceId = $province.val()
+                        let provinceName = dataAll.find(item => item.Id == provinceId)?.Name;
+
+                        let districtId = $district.val()
+                        let districtName = dataDistict.find(item => item.Id == districtId)?.Name;
+
+                        let wardId = $ward.val()
+                        let wardName = dataWard.find(item => item.Id == wardId)?.Name;
+
+                        let address = $("#address").val();
+
+                        let encodeFormData = new FormData();
+
+                        encodeFormData.append("province", provinceName);
+                        encodeFormData.append("district", districtName);
+                        encodeFormData.append("ward", wardName);
+                        encodeFormData.append("address", address);
+
+                        $.ajax({
+                            url: '@Url.Action("CheckFee")',
+                            type: 'POST',
+                            data: encodeFormData,
+                            contentType: false,
+                            processData: false,
+                            success: function (rs) {
+                                if (rs?.success == true) {
+                                    location.href = '/thanh-toan'
+                                }
+                                else {
+                                    alert("Không tính được phí vận chuyển. Vui lòng thử lại.")
+                                }
+                            }
+                        })
+                    }
+                })
+
+            })
+            chooseAddressModal.on('hidden.bs.modal', function () {
+                resetProvince()
+                resetDisttrict();
+                resetWard();
+            })
+
+            function generateProvince() {
+                resetProvince()
+                resetDisttrict();
+                resetWard();
+
+                dataAll.forEach(function (item) {
+                    $province.append($("<option></option>").attr("value", item.Id).text(item.Name));
+                })
+            }
+            function resetProvince() {
+                $province.empty();
+                $province.append($("<option></option>").attr("value", "").text("--Chọn Tỉnh/Thành--"));
+            }
+
+
+            function generateDisttrict(provinceId) {
+                resetDisttrict()
+                var province = dataAll.find(item => item.Id == provinceId);
+                if (province) {
+                    dataDistict = province?.Districts.map((item) => ({ Id: item.Id, Name: item.Name }))
+                    dataDistict.forEach(function (item) {
+                        $district.append($("<option></option>").attr("value", item.Id).text(item.Name));
+                    })
+                }
+            }
+            function resetDisttrict() {
+                $district.empty();
+                $district.append($("<option></option>").attr("value", "").text("--Chọn Quận/Huyện--"));
+            }
+
+
+            function generateWard(provinceId, districtId) {
+                resetWard()
+                var province = dataAll.find(item => item.Id == provinceId);
+                if (province) {
+                    var district = province?.Districts.find(item => item.Id == districtId);
+                    if (district) {
+                        dataWard = district?.Wards?.map((item) => ({ Id: item.Id, Name: item.Name }))
+                        dataWard.forEach(function (item) {
+                            $ward.append($("<option></option>").attr("value", item.Id).text(item.Name));
+                        })
+                    }
+                }
+            }
+            function resetWard() {
+                $ward.empty();
+                $ward.append($("<option></option>").attr("value", "").text("--Chọn Phường/Xã--"));
+            }
+        });
+    </script>
 }
 

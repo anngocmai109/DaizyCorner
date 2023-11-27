@@ -136,9 +136,9 @@
                 </div>
             </div>
         </div>
-        <div class="card-footer">
+        @*<div class="card-footer">
             Footer
-        </div>
+        </div>*@
     </div>
 </section>
 
@@ -221,11 +221,12 @@
                         datasetFill: false
                     }
 
-                    new Chart(barChartCanvas, {
+                    var chart = new Chart(barChartCanvas, {
                         type: 'bar',
                         data: barChartData,
                         options: barChartOptions
                     });
+                    chart.update();
                     load_data(rs.Data);
                 }
             });
@@ -233,7 +234,6 @@
         }
 
         function load_data(data) {
-            console.log(data);
             var table = $("#statisticalTable").DataTable({
                 "destroy": true,
                 'bFilter': false,
@@ -261,7 +261,6 @@
                         "autoWidth": true,
                         "render": function (data, type, row) {
                             let strDate = moment(row.Date).format('DD/MM/yyyy')
-                            console.log(strDate);
                             return strDate;
                         }
                     },

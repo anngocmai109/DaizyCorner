@@ -8,7 +8,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using VNPAY_CS_ASPX;
+using WebBanHangOnline.Common;
 using WebBanHangOnline.Models;
+using WebBanHangOnline.Models.Common;
 using WebBanHangOnline.Models.EF;
 
 namespace WebBanHangOnline.Controllers
@@ -58,7 +60,7 @@ namespace WebBanHangOnline.Controllers
         //[AllowAnonymous]
         public ActionResult Index()
         {
-           
+
             ShoppingCart cart = (ShoppingCart)Session["Cart"];
             if (cart != null && cart.Items.Any())
             {
@@ -119,7 +121,7 @@ namespace WebBanHangOnline.Controllers
                     //displayTmnCode.InnerText = "Mã Website (Terminal ID):" + TerminalID;
                     //displayTxnRef.InnerText = "Mã giao dịch thanh toán:" + orderId.ToString();
                     //displayVnpayTranNo.InnerText = "Mã giao dịch tại VNPAY:" + vnpayTranId.ToString();
-                    ViewBag.ThanhToanThanhCong = "Số tiền thanh toán (VND):" + vnp_Amount.ToString() + "đ " ;
+                    ViewBag.ThanhToanThanhCong = "Số tiền thanh toán (VND):" + vnp_Amount.ToString() + "đ ";
                     //displayBankCode.InnerText = "Ngân hàng thanh toán:" + bankCode;
                 }
             }
@@ -132,9 +134,16 @@ namespace WebBanHangOnline.Controllers
         {
             ShoppingCart cart = (ShoppingCart)Session["Cart"];
             if (cart != null && cart.Items.Any())
-            {
                 ViewBag.CheckCart = cart;
-            }
+
+            GHTKFee gHTKFee = (GHTKFee)Session["GHTKFee"];
+            if (gHTKFee != null)
+                ViewBag.GHTKFee = gHTKFee;
+
+            OrderAddress orderAddress = (OrderAddress)Session["OrderAddress"];
+            if (gHTKFee != null)
+                ViewBag.OrderAddress = orderAddress;
+
             return View();
         }
 
@@ -189,11 +198,58 @@ namespace WebBanHangOnline.Controllers
         }
 
         [HttpPost]
+        public ActionResult CheckFee(CheckFee checkFee)
+        {
+            bool isSuccess = false;
+            try
+            {
+                GHTKFeeRequest gHTKFeeRequest = new GHTKFeeRequest()
+                {
+                    district = checkFee.district,
+                    address = checkFee.address + "," + checkFee.ward,
+                    province = checkFee.province,
+                    pick_district = ConfigurationManager.AppSettings["pick_district"],
+                    pick_province = ConfigurationManager.AppSettings["pick_province"],
+                };
+
+                var ghtkFee = Helpers.GetFreeFromGHTK(gHTKFeeRequest);
+                if (ghtkFee.success == true)
+                {
+                    isSuccess = true;
+                    if (Session["GHTKFee"] != null)
+                    {
+                        Session.Remove("GHTKFee");
+                        Session.Add("GHTKFee", ghtkFee.fee);
+                    }
+
+                    if (Session["OrderAddress"] != null)
+                    {
+                        Session.Remove("OrderAddress");
+                        Session.Add("OrderAddress", new OrderAddress
+                        {
+                            address = checkFee.address,
+                            district = checkFee.district,
+                            province = checkFee.province,
+                            ward = checkFee.ward,
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            return Json(new
+            {
+                success = isSuccess,
+            });
+        }
+
+        [HttpPost]
         //[AllowAnonymous]
         [ValidateAntiForgeryToken]
         public ActionResult CheckOut(OrderViewModel req)
         {
-            var code = new { Success = false, Code = -1, Url=""};
+            var code = new { Success = false, Code = -1, Url = "" };
 
             if (ModelState.IsValid)
             {
@@ -390,7 +446,7 @@ namespace WebBanHangOnline.Controllers
             return Json(new { Success = false });
         }
 
-        public string UrlPayment(int TypePaymentVN,string orderCode)
+        public string UrlPayment(int TypePaymentVN, string orderCode)
         {
             var urlPayment = "";
             var order = db.Orders.FirstOrDefault(x => x.Code == orderCode);

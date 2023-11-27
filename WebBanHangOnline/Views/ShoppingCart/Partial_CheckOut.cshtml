@@ -1,8 +1,14 @@
 ﻿@model WebBanHangOnline.Models.OrderViewModel
+
+@using WebBanHangOnline.Models
+@using WebBanHangOnline.Models.Common;
+
 @{
+    OrderAddress orderAddress = null;
     if (ViewBag.User != null)
     {
         var user = (WebBanHangOnline.Models.ApplicationUser)ViewBag.User;
+        orderAddress = (OrderAddress)ViewBag.OrderAddress;
     }
 }
 
@@ -21,16 +27,6 @@
             $('#btnCheckOut').attr("disabled", "disabled");
             $('#load_send').html("<h5>Đang gửi ....</h5>");
         }
-        //function OnSuccessCO(data) {
-        //    if (data.Success) {
-        //        if (data.Code == 1) {
-        //            location.href = "/thanh-toan-thanh-cong";
-        //        } else {
-        //            location.href = data.Url;
-        //        }
-        //    }
-        //}
-
         function OnSuccessCO(res) {
             if (res.Success) {
                 if (res.Code == 1) {
@@ -56,9 +52,24 @@
             <span id="phone_error"></span>
         </div>
         <div class="form-group">
-            <label>Địa chỉ</label>
-            <input type="text" name="Address" class="form-control" autocomplete="off" />
+            <label>Tỉnh/Thành</label>
+            <input type="text" name="Province" value="@orderAddress.province" disabled class="form-control" autocomplete="off" />
         </div>
+
+        <div class="form-group">
+            <label>Quận/Huyện</label>
+            <input type="text" name="District" value="@orderAddress.district" disabled class="form-control" autocomplete="off" />
+        </div>
+        <div class="form-group">
+            <label>Phường/Xã</label>
+            <input type="text" name="Ward" value="@orderAddress.ward" disabled class="form-control" autocomplete="off" />
+        </div>
+
+        <div class="form-group">
+            <label>Địa chỉ</label>
+            <input type="text" name="Address" value="@orderAddress.address" disabled class="form-control" autocomplete="off" />
+        </div>
+
         <div class="form-group">
             <label>Email</label>
             <input type="text" name="Email" class="form-control" autocomplete="off" />
@@ -77,8 +88,22 @@
             <span id="phone_error"></span>
         </div>
         <div class="form-group">
+            <label>Tỉnh/Thành</label>
+            <input type="text" name="Province" value="@orderAddress.province" disabled class="form-control" autocomplete="off" />
+        </div>
+
+        <div class="form-group">
+            <label>Quận/Huyện</label>
+            <input type="text" name="District" value="@orderAddress.district" disabled class="form-control" autocomplete="off" />
+        </div>
+        <div class="form-group">
+            <label>Phường/Xã</label>
+            <input type="text" name="Ward" value="@orderAddress.ward" disabled class="form-control" autocomplete="off" />
+        </div>
+
+        <div class="form-group">
             <label>Địa chỉ</label>
-            <input type="text" name="Address" class="form-control" autocomplete="off" />
+            <input type="text" name="Address" value="@orderAddress.address" disabled class="form-control" autocomplete="off" />
         </div>
         <div class="form-group">
             <label>Email</label>
@@ -96,12 +121,12 @@
     </div>
     <div class="form-group" id="load_form_payment" style="display: none; ">
         @*<h5 style="font-family: sans-serif;font-weight: bold"><label>Chọn phương thức thanh toán:</label><br/></h5>
-        <h5 style="font-family: sans-serif;font-weight: bold">Cách 1: Chuyển hướng sang VNPAY chọn phương thức thanh toán</h5>*@
+            <h5 style="font-family: sans-serif;font-weight: bold">Cách 1: Chuyển hướng sang VNPAY chọn phương thức thanh toán</h5>*@
         <label style="font-family:sans-serif;font-weight:bold"><input type="radio" name="TypePaymentVN" value="0" checked /> Cổng thanh toán VNPAYQR </label>
         @*<h5 style="font-family:sans-serif;font-weight:bold">Cách 2: Tách phương thức thanh toán tại site của Merchant</h5>
-        <label style="font-family:sans-serif"><input type="radio" name="TypePaymentVN" value="1" /> Thanh toán qua ứng dụng hỗ trợ VNPAYQR </label><br />
-        <label style="font-family:sans-serif"><input type="radio" name="TypePaymentVN" value="2" /> ATM-Tài khoản ngân hàng nội địa </label><br />
-        <label style="font-family:sans-serif"><input type="radio" name="TypePaymentVN" value="3" /> Thanh toán qua thẻ quốc tế </label><br />*@
+            <label style="font-family:sans-serif"><input type="radio" name="TypePaymentVN" value="1" /> Thanh toán qua ứng dụng hỗ trợ VNPAYQR </label><br />
+            <label style="font-family:sans-serif"><input type="radio" name="TypePaymentVN" value="2" /> ATM-Tài khoản ngân hàng nội địa </label><br />
+            <label style="font-family:sans-serif"><input type="radio" name="TypePaymentVN" value="3" /> Thanh toán qua thẻ quốc tế </label><br />*@
     </div>
     <div class="form-group" id="load_send"></div>
     <div class="form-group">
