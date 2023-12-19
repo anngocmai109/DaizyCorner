@@ -30,16 +30,16 @@
     <div class="container news_section_container">
         @if (Model != null)
         {
-            <div class="row">
+            @*<div class="row">
                 <div class="col-md-12">
                     <h1 class="title-news">@Model.Title</h1>
                 </div>
-            </div>
-            <div class="row">
+            </div>*@
+            @*<div class="row">
                 <div class="col-md-12">
                     @Model.Description
                 </div>
-            </div>
+            </div>*@
             <div class="row">
                 <div class="col-md-12">
                     @Html.Raw(Model.Detail)

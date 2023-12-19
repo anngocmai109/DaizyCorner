@@ -4,45 +4,8 @@
     ViewBag.Title = "Lịch sử đơn hàng";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@*@if (Model != null && User.Identity.IsAuthenticated)
-    {
-        var i = 1;
-        <h2 style="font-family:sans-serif;font-weight:bold">Lịch sử đơn hàng</h2>
-        <table class="table table">
-            <thead>
-                <tr>
-                    <th>STT</th>
-                    <th>Mã Đơn hàng</th>
-                    <th>Tên khách hàng</th>
-                    <th>Số điện thoại</th>
-                    <th>Địa chỉ</th>
-                    <th>Tổng tiền</th>
-                    <th>Ngày tạo</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@i</td>
-                        <td>@item.Code</td>
-                        <td>
-                            @item.CustomerName
-                        </td>
-                        <td>@item.Phone</td>
-                        <td>@item.Address</td>
-                        <td>@Common.FormatNumber(item.TotalAmount, 0) đ</td>
-                        <td>
-                            @item.CreatedDate
-                        </td>
-                    </tr>
-                    i++;
-                }
-            </tbody>
-        </table>
-    }*@
-
 <link rel="stylesheet" type="text/css" href="~/Content/assets/styles/main_styles.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <style>
     .news_section_container {
         margin-top: 180px;
@@ -58,16 +21,7 @@
     .sp {
         display: inline-block;
     }
-    /*.img-box img {
-        max-width: 100%;
-        max-height: 100%;
-    }
-
-    .row-item-new {
-        margin-bottom: 20px;
-    }*/
 </style>
-
 <div class="container news_section_container">
     <div class="row">
         <div class="col-md-12">
@@ -77,63 +31,41 @@
     @if (Model != null && User.Identity.IsAuthenticated)
     {
         var i = 1;
-        @*<h2 style="font-family:sans-serif;font-weight:bold">Lịch sử đơn hàng</h2>*@
-        <table class="table table">
-            <thead>
-                <tr>
-                    <th>STT</th>
-                    <th>Mã Đơn hàng</th>
-                    <th>Tên khách hàng</th>
-                    <th>Số điện thoại</th>
-                    <th>Địa chỉ</th>
-                    <th>Tổng tiền</th>
-                    <th>Ngày tạo</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
+        <div class="container">
+            <table id="example" class="table table-striped table-bordered" width="100%">
+                <thead>
                     <tr>
-                        <td>@i</td>
-                        <td>@item.Code</td>
-                        <td>
-                            @item.CustomerName
-                        </td>
-                        <td>@item.Phone</td>
-                        <td>@item.Address</td>
-                        <td>@Common.FormatNumber(item.TotalAmount, 0) đ</td>
-                        <td>
-                            @item.CreatedDate
-                        </td>
+                        <th>STT</th>
+                        @*<th>Mã Đơn hàng</th>*@
+                        <th>Khách hàng</th>
+                        @*<th>Số điện thoại</th>*@
+                        <th>Địa chỉ</th>
+                        <th>Tổng tiền</th>
+                        <th>Ngày tạo</th>
                     </tr>
-                    i++;
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody id="load_statisticalTable">
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@i</td>
+                            @*<td>@item.Code</td>*@
+                            <td>
+                                @item.CustomerName
+                            </td>
+                            @*<td>@item.Phone</td>*@
+                            <td>@item.Address @item.District @item.Province @item.Ward</td>
+                            <td>@Common.FormatNumber(item.TotalAmount, 0) đ</td>
+                            <td>
+                                @item.CreatedDate
+                            </td>
+                        </tr>
+                        i++;
+                    }
+                </tbody>
+            </table>
+
+        </div>
     }
 
 </div>
-
-@*@section scripts
-        {
-        <script>
-            $(document).ready(function () {
-                $('body').on('click', '.btnDelete', function () {
-                    var id = $(this).data("id");
-                    var conf = confirm('Bạn chắc chắn xóa sản phẩm này khỏi danh sách yêu thích?');
-                    if (conf == true) {
-                        $.ajax({
-                            url: '/Wishlist/delete',
-                            type: 'POST',
-                            data: { id: id },
-                            success: function (rs) {
-                                if (rs.success) {
-                                    $('#trow_' + id).remove();
-                                }
-                            }
-                        });
-                    }
-                });
-            });
-        </script>
-    }*@

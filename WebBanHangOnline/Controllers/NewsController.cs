@@ -16,7 +16,7 @@ namespace WebBanHangOnline.Controllers
         // GET: News
         public ActionResult Index(int? page)
         {
-            var pageSize = 10;
+            var pageSize = 4;
             if (page == null)
             {
                 page = 1;

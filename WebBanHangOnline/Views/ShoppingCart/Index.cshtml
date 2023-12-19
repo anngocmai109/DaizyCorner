@@ -43,7 +43,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Vui lòng chọn địa chỉ giao hàng</h4>
+                <h4 class="modal-title" style="font-family:sans-serif">Vui lòng chọn địa chỉ giao hàng</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -51,7 +51,7 @@
             <div class="modal-body">
                 <form role="form" id="formChooseProvince">
                     <div class="form-group">
-                        <label>Tỉnh/Thành</label>
+                        <label>Tỉnh/Thànhphố</label>
                         <select class="form-control" name="province" id="province">
                             <option value="">--Chọn Tỉnh/Thành--</option>
                         </select>
@@ -70,12 +70,12 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Đường/Số nhà/...</label>
+                        <label>Địa chỉ</label>
                         <input class="form-control" type="text" name="address" id="address">
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                        <button type="button" class="btn btn-primary" id="btnMuahang">Mua hàng</button>
+                        <button type="button" class="btn btn-primary" id="btnMuahang">Thanh toán</button>
                     </div>
                 </form>
             </div>
@@ -134,7 +134,7 @@
             $.getJSON("https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json", function (data) {
                 dataAll = data;
             }).fail(function () {
-                alert("Lấy thông tin địa lý thất bại. Vui lòng thử lại.");
+                alert("Lấy thông tin địa chỉ thất bại. Vui lòng thử lại.");
             });
 
             var chooseAddressModal = $('#chooseAddress');

@@ -39,21 +39,24 @@
         {
             foreach (var item in Model)
             {
-                <div class="row row-item-new">
-                    <div class="col-md-3">
-                        <div class="img-box">
-                            <a href="" title="@item.Title"><img src="@item.Image" alt="@item.Title" /></a>
+                if (item.IsActive == true)
+                {
+                    <div class="row row-item-new">
+                        <div class="col-md-3">
+                            <div class="img-box">
+                                <a href="" title="@item.Title"><img src="@item.Image" alt="@item.Title" /></a>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-9">
-                        <div class="content-box">
-                            <h4><a href="/@item.Alias-n@(item.Id)" title="@item.Title">@item.Title</a></h4>
-                            <div class="description-box">
-                                @item.Description
+                        <div class="col-md-9">
+                            <div class="content-box">
+                                <h4><a href="/@item.Alias-n@(item.Id)" title="@item.Title">@item.Title</a></h4>
+                                <div class="description-box">
+                                    @item.Description
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                }
             }
         }
         <div class="row">
