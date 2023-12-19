@@ -54,6 +54,16 @@ namespace WebBanHangOnline.Controllers
             return PartialView();
         }
 
+        public ActionResult OrderDetail(int orderid)
+        {
+            var item = db.Orders.Find(orderid);
+            if (User.Identity.IsAuthenticated && item != null)
+            {
+                return View(item);
+            }
+            return View();
+        }
+
         [AllowAnonymous]
         public ActionResult _Load_Review(int productId)
         {

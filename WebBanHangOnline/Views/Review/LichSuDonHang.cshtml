@@ -42,6 +42,7 @@
                         <th>Địa chỉ</th>
                         <th>Tổng tiền</th>
                         <th>Ngày tạo</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody id="load_statisticalTable">
@@ -59,6 +60,7 @@
                             <td>
                                 @item.CreatedDate
                             </td>
+                            <td><a href="@Url.Action("OrderDetail", "Order",new { orderid = item.Id })">Xem chi tiết</a></td>
                         </tr>
                         i++;
                     }

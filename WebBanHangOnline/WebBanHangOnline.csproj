@@ -3654,6 +3654,7 @@
     <Content Include="Views\Products\search.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Introduce\Index.cshtml" />
+    <Content Include="Views\Review\OrderDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
