@@ -3655,6 +3655,7 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Introduce\Index.cshtml" />
     <Content Include="Views\Review\OrderDetail.cshtml" />
+    <Content Include="Views\Review\Partial_SanPham.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

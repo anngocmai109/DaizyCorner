@@ -1,4 +1,4 @@
-﻿$(document).ready(function () {
+$(document).ready(function () {
     ShowCount();
     $('body').on('click', '.btnAddToCart', function (e) {
         e.preventDefault();
@@ -92,8 +92,8 @@ function Update(id, quantity) {
             if (rs.Success) {
                 LoadCart();
             } else {
-                debugger;
-                alert('Cập nhật thất bại. Số lượng mua lớn hơn số lượng có. Vui lòng thử lại.')
+                LoadCart();
+                alert('Số lượng mua lớn hơn số lượng có. Vui lòng thử lại.')
             }
         }
     });

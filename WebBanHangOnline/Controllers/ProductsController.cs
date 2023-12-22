@@ -55,8 +55,9 @@ namespace WebBanHangOnline.Controllers
             return View(productViews);
         }
 
-        public ActionResult Detail(string alias, int id)
+        public ActionResult Detail(string alias, int id, bool allowrate = false)
         {
+            
             var item = db.Products.Find(id);
             if (item != null)
             {
@@ -67,6 +68,7 @@ namespace WebBanHangOnline.Controllers
             }
             var countReview = db.Reviews.Where(x => x.ProductId == id).Count();
             ViewBag.CountReview = countReview;
+            ViewBag.AllowRate = allowrate;
             return View(item);
         }
         public ActionResult ProductCategory(string alias, int id)

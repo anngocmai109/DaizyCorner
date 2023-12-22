@@ -73,23 +73,21 @@
 @section scripts
     {
     <script>
-        $(document).ready(function () {
-            $('body').on('click', '.btnDelete', function () {
-                var id = $(this).data("id");
-                var conf = confirm('Bạn chắc chắn xóa quyền này không?');
-                if (conf == true) {
-                    $.ajax({
-                        url: '/admin/role/delete',
-                        type: 'POST',
-                        data: { id: id },
-                        success: function (rs) {
-                            if (rs.success) {
-                                $('#trow_' + id).remove();
-                            }
+        $('body').on('click', '.btnDelete', function () {
+            var id = $(this).data("id");
+            var conf = confirm('Bạn chắc chắn xóa quyền này không?');
+            if (conf == true) {
+                $.ajax({
+                    url: '/admin/role/delete',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function (rs) {
+                        if (rs.success) {
+                            $('#trow_' + id).remove();
                         }
-                    });
-                }
-            });
-        })
+                    }
+                });
+            }
+        });
     </script>
 }

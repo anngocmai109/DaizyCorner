@@ -1,0 +1,35 @@
+﻿@model IEnumerable<WebBanHangOnline.Models.EF.OrderDetail>
+@if (Model != null && Model.Any())
+{
+    int i = 1;
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Hình ảnh</th>
+                <th>Tên sản phẩm</th>
+                <th>Giá</th>
+                <th>Số lượng</th>
+                <th>Thành tiền</th>
+                <th></th>
+            </tr>
+
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@i</td>
+                    <td align="center"><img src="@item.Product.ProductImage.FirstOrDefault(x => x.IsDefault).Image" style="max-width:70px"/></td>
+                    <td>@item.Product.Title</td>
+                    <td >@WebBanHangOnline.Common.Common.FormatNumber(item.Price,0)đ</td>
+                    <td>@item.Quantity</td>
+                    <td>@WebBanHangOnline.Common.Common.FormatNumber((item.Price * item.Quantity), 0)đ</td>
+                    <td><a href="@Url.Action("Detail", "Products", new {alias = item.Product.Alias,id=item.Product.Id,allowrate = true})">Đánh giá</a></td>
+                </tr>
+                i++;
+            }
+        </tbody>
+    </table>
+}
+

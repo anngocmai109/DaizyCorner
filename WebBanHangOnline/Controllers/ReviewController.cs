@@ -48,7 +48,7 @@ namespace WebBanHangOnline.Controllers
                 var userStore = new UserStore<ApplicationUser>(new ApplicationDbContext());
                 var userManager = new UserManager<ApplicationUser>(userStore);
                 var user = userManager.FindByName(User.Identity.Name);
-                var items = db.Orders.Where(x => x.CustomerId == user.Id).ToList();
+                var items = db.Orders.Where(x => x.CustomerId == user.Id).OrderByDescending(s => s.CreatedDate).ToList();
                 return PartialView(items);
             }
             return PartialView();
@@ -62,6 +62,12 @@ namespace WebBanHangOnline.Controllers
                 return View(item);
             }
             return View();
+        }
+
+        public ActionResult Partial_SanPham(int id)
+        {
+            var items = db.OrderDetails.Where(x => x.OrderId == id).ToList();
+            return PartialView(items);
         }
 
         [AllowAnonymous]

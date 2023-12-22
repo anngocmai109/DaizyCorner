@@ -1,5 +1,6 @@
 ﻿@model WebBanHangOnline.Models.EF.Product
 @{
+    var allowrate = (bool) ViewBag.AllowRate;
     ViewBag.Title = "Detail";
 }
 <link rel="stylesheet" type="text/css" href="~/Content/assets/styles/single_styles.css">
@@ -62,7 +63,7 @@
             <div class="col-lg-5">
                 <div class="product_details">
                     <div class="product_details_title">
-                        <h2>@Model.Title</h2>
+                        <h2 style="font-family:sans-serif;font-weight:bold">@Model.Title</h2>
                         <table>
                             <tr>
                                 <td>
@@ -147,12 +148,15 @@
                             </div>
 
                             <!-- Add Review -->
+                            @if (allowrate)
+                            {
+                                <div class="col-lg-6 add_review_col">
 
-                            <div class="col-lg-6 add_review_col">
+                                    @Html.Action("_Review", "Review", new { productId = Model.Id })
 
-                                @Html.Action("_Review", "Review", new {productId = Model.Id})
+                                </div>
+                            }
 
-                            </div>
 
                         </div>
                     </div>

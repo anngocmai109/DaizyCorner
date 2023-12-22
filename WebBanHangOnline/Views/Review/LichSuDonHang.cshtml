@@ -5,7 +5,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link rel="stylesheet" type="text/css" href="~/Content/assets/styles/main_styles.css" />
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <style>
     .news_section_container {
         margin-top: 180px;
@@ -13,13 +12,18 @@
 
     .title-news {
         font-size: 24px;
-        /*border-bottom: 1px solid;*/
+        border-bottom: 1px solid;
         padding: 15px 0px;
         margin-bottom: 25px;
     }
 
-    .sp {
-        display: inline-block;
+    .img-box img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    .row-item-new {
+        margin-bottom: 20px;
     }
 </style>
 <div class="container news_section_container">
@@ -40,8 +44,8 @@
                         <th>Khách hàng</th>
                         @*<th>Số điện thoại</th>*@
                         <th>Địa chỉ</th>
-                        <th>Tổng tiền</th>
-                        <th>Ngày tạo</th>
+                        <th style="font-family:sans-serif">Tổng tiền</th>
+                        <th style="font-family:sans-serif">Ngày tạo</th>
                         <th></th>
                     </tr>
                 </thead>
