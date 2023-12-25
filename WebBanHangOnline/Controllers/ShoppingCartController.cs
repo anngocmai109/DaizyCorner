@@ -136,7 +136,7 @@ namespace WebBanHangOnline.Controllers
             ShoppingCart cart = (ShoppingCart)Session["Cart"];
             if (!(cart != null && cart.Items.Any()) || !TempData.ContainsKey("GHTKFee") || !TempData.ContainsKey("OrderAddress"))
             {
-                TempData["MessageFromCheckOut"] = "Không có thông thanh toán vui lòng thử lại.";
+                TempData["MessageFromCheckOut"] = "Không có thông tin thanh toán vui lòng thử lại.";
                 return Redirect("gio-hang");
             }    
             ViewBag.CheckCart = cart;

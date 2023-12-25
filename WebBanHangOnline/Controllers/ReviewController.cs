@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI;
 using WebBanHangOnline.Models;
 using WebBanHangOnline.Models.EF;
 
@@ -73,7 +75,7 @@ namespace WebBanHangOnline.Controllers
         [AllowAnonymous]
         public ActionResult _Load_Review(int productId)
         {
-            var item = db.Reviews.Where(x => x.ProductId == productId).OrderByDescending(x => x.CreatedDate).ToList() ;
+            var item = db.Reviews.Where(x => x.ProductId == productId).OrderByDescending(x => x.CreatedDate).ToList();
             ViewBag.Count = item.Count;
             return PartialView(item);
         }
