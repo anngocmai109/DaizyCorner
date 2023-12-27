@@ -73,7 +73,7 @@ namespace WebBanHangOnline.Controllers
             var rs = await UserManager.UpdateAsync(user);
             if (rs.Succeeded)
             {
-                return RedirectToAction("Profile");
+                return RedirectToAction("Index", "Home");
             }
             return View(req);
         }
